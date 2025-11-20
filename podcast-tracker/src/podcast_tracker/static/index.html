@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Podcast Tracker - Podcasts de IA en Español</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="icon">🎙️</span>
+                    AI Podcast Tracker
+                </h1>
+                <p class="subtitle">Tus podcasts favoritos de IA en español</p>
+            </div>
+            <button id="refreshBtn" class="btn-refresh">
+                <span class="refresh-icon">🔄</span>
+                Actualizar
+            </button>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalPodcasts">0</div>
+                <div class="stat-label">Podcasts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalEpisodes">0</div>
+                <div class="stat-label">Episodios Pendientes</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <select id="podcastFilter" class="filter-select">
+                <option value="">Todos los podcasts</option>
+            </select>
+        </div>
+
+        <!-- Episodes List -->
+        <div class="episodes-container">
+            <h2 class="section-title">Episodios Pendientes</h2>
+            <div id="episodesList" class="episodes-list">
+                <!-- Episodes will be loaded here -->
+            </div>
+            
+            <!-- Pagination -->
+            <div id="pagination" class="pagination">
+                <!-- Pagination will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Cargando episodios...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state hidden">
+            <div class="empty-icon">🎉</div>
+            <h3>¡Todo al día!</h3>
+            <p>No tienes episodios pendientes por escuchar</p>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
