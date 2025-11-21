@@ -2,6 +2,7 @@
 
 import logging
 import uvicorn
+import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -49,26 +50,29 @@ INITIAL_PODCASTS = [
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager."""
-    # Startup
-    logger.info("Starting Podcast Tracker...")
-    
-    # Initialize database
-    init_db()
-    
-    # Seed initial podcasts
-    seed_podcasts()
-    
-    # Start scheduler
-    podcast_scheduler.start()
-    
-    logger.info("Application started successfully")
+    # Skip initialization if running tests
+    if os.getenv("TESTING") != "true":
+        # Startup
+        logger.info("Starting Podcast Tracker...")
+        
+        # Initialize database
+        init_db()
+        
+        # Seed initial podcasts
+        seed_podcasts()
+        
+        # Start scheduler
+        podcast_scheduler.start()
+        
+        logger.info("Application started successfully")
     
     yield
     
     # Shutdown
-    logger.info("Shutting down...")
-    podcast_scheduler.stop()
-    logger.info("Application shutdown complete")
+    if os.getenv("TESTING") != "true":
+        logger.info("Shutting down...")
+        podcast_scheduler.stop()
+        logger.info("Application shutdown complete")
 
 
 def seed_podcasts():

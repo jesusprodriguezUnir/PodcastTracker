@@ -65,6 +65,48 @@ La aplicación estará disponible en: http://localhost:8000
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 
+## 🐳 Docker
+
+### Usar Docker Compose (recomendado)
+
+```bash
+# Construir y levantar la aplicación
+docker-compose up --build
+
+# Acceder a la aplicación
+# http://localhost:8000
+```
+
+El comando anterior:
+- Construye la imagen Docker automáticamente
+- Inicia el contenedor con la aplicación
+- Monta un volumen para persistencia de la base de datos SQLite
+- Configura automáticamente las variables de entorno
+
+### Detener la aplicación
+
+```bash
+docker-compose down
+```
+
+### Construir la imagen Docker manualmente
+
+```bash
+docker build -t podcast-tracker:latest .
+```
+
+### Ejecutar contenedor manualmente
+
+```bash
+docker run -d \
+  --name podcast-tracker \
+  -p 8000:8000 \
+  -v podcast_data:/app/data \
+  -e DATABASE_URL=sqlite:////app/data/podcast_tracker.db \
+  -e LOG_LEVEL=INFO \
+  podcast-tracker:latest
+```
+
 ## 🧪 Tests
 
 ### Ejecutar todos los tests
