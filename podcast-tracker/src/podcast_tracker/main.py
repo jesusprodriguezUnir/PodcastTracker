@@ -34,15 +34,20 @@ INITIAL_PODCASTS = [
         "rss_url": "https://www.ivoox.com/test-turing_fg_f11955194_filtro_1.xml",
         "spotify_url": "https://open.spotify.com/show/5K3qJXqYqLxqLqLqLqLqLq"
     },
+   {
+        "name": "Monos Estocásticos",
+        "rss_url": "https://cuonda.com/monos-estocasticos/feed",
+        "spotify_url": "https://open.spotify.com/show/1LgQzOa79j7Dlsa9YF5x2b"
+    },
     {
         "name": "Inteligencia Artificial con Jon Hernandez",
-        "rss_url": "https://anchor.fm/s/your-feed-id/podcast/rss",  # Placeholder - needs actual RSS
-        "spotify_url": "https://open.spotify.com/show/your-show-id"
+        "rss_url": "https://www.ivoox.com/podcast-inteligencia-artificial-jon-hernandez_fg_f12413741_filtro_1.xml",
+        "spotify_url": "https://open.spotify.com/show/70kXF7VTC2fF5O3N9KYaXW"
     },
     {
         "name": "Inteligencia Artificial - Pocho Costa",
-        "rss_url": "https://anchor.fm/s/your-feed-id/podcast/rss",  # Placeholder - needs actual RSS
-        "spotify_url": "https://open.spotify.com/show/your-show-id"
+        "rss_url": "https://pochocosta.com/feed/podcast",
+        "spotify_url": "https://open.spotify.com/show/4g7RlgQ9GJsV1dxWfs0O1I"
     }
 ]
 
@@ -50,9 +55,12 @@ INITIAL_PODCASTS = [
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager."""
-    # Skip initialization if running tests
-    if os.getenv("TESTING") != "true":
-        # Startup
+    # Skip full initialization if running tests, but still initialize DB
+    if os.getenv("TESTING") == "true":
+        # Initialize test database only
+        init_db()
+    else:
+        # Full startup for production
         logger.info("Starting Podcast Tracker...")
         
         # Initialize database

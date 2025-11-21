@@ -22,10 +22,40 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
+class _EngineProxy:
+    """Proxy object that allows runtime engine replacement."""
+    _engine = engine
+    
+    @classmethod
+    def get(cls):
+        """Get the current engine."""
+        return cls._engine
+    
+    @classmethod
+    def set(cls, new_engine):
+        """Set a new engine."""
+        cls._engine = new_engine
+
+
+class _SessionLocalProxy:
+    """Proxy object that allows runtime SessionLocal replacement."""
+    _sessionlocal = SessionLocal
+    
+    @classmethod
+    def get(cls):
+        """Get the current SessionLocal."""
+        return cls._sessionlocal
+    
+    @classmethod
+    def set(cls, new_sessionlocal):
+        """Set a new SessionLocal."""
+        cls._sessionlocal = new_sessionlocal
+
+
 def init_db() -> None:
     """Initialize database, create all tables."""
     logger.info("Initializing database...")
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=_EngineProxy.get())
     logger.info("Database initialized successfully")
 
 
@@ -38,7 +68,8 @@ def get_db() -> Generator[Session, None, None]:
         with get_db() as db:
             db.query(Podcast).all()
     """
-    db = SessionLocal()
+    SessionLocalCurrent = _SessionLocalProxy.get()
+    db = SessionLocalCurrent()
     try:
         yield db
         db.commit()
@@ -58,7 +89,8 @@ def get_db_session() -> Generator[Session, None, None]:
         def route(db: Session = Depends(get_db_session)):
             ...
     """
-    db = SessionLocal()
+    SessionLocalCurrent = _SessionLocalProxy.get()
+    db = SessionLocalCurrent()
     try:
         yield db
     finally:

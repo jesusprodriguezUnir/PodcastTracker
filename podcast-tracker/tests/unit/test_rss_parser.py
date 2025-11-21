@@ -12,14 +12,20 @@ def test_parse_feed_success():
     """Test successful RSS feed parsing."""
     mock_feed = MagicMock()
     mock_feed.bozo = False
-    mock_feed.feed.title = "Test Podcast"
-    mock_feed.feed.description = "Test Description"
+    # Use a dict-like object for feed that supports .get() method
+    mock_feed.feed = {
+        "title": "Test Podcast",
+        "description": "Test Description"
+    }
     
+    # Create a proper mock entry with get() support
     mock_entry = MagicMock()
-    mock_entry.title = "Episode 1"
-    mock_entry.summary = "Episode description"
     mock_entry.published = "Mon, 20 Nov 2023 10:00:00 GMT"
-    mock_entry.link = "https://example.com/episode1.mp3"
+    mock_entry.get.side_effect = lambda key, default="": {
+        "title": "Episode 1",
+        "summary": "Episode description",
+        "link": "https://example.com/episode1.mp3"
+    }.get(key, default)
     mock_entry.enclosures = []
     
     mock_feed.entries = [mock_entry]
