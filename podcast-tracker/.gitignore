@@ -37,9 +37,9 @@ env/
 .env.local
 
 # Database
-*.db
-*.sqlite
-*.sqlite3
+# *.db
+# *.sqlite
+# *.sqlite3
 
 # Testing
 .pytest_cache/
